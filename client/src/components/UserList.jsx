@@ -10,6 +10,7 @@ const UserList = () => {
   const [alert, setAlert] = useState(false);
   const [alertMsg, setAlertMsg] = useState(null);
   const [alertStatus, setAlertStatus] = useState(null);
+  const [hideAlert, setHideAlert] = useState(false);
 
   useEffect(() => {
     const fetchData = () => {
@@ -41,9 +42,12 @@ const UserList = () => {
         if (res.data.error) {
           setAlertStatus("error");
           setAlertMsg(res.data.message)
+          setHideAlert(!hideAlert)
         } else {
           setAlertStatus("success");
           setAlertMsg(res.data.message);
+          setData(data.filter(user => user.id !== id))
+          setHideAlert(!hideAlert)
         }
       })
       .catch((err) => {
@@ -52,13 +56,14 @@ const UserList = () => {
       });
   };
 
+  
   if (loading) {
     return <div>Loading...</div>;
   }
   return (
     <div>
       {alert && (
-        <AlertBox status={alertStatus} message={alertMsg} />
+        <AlertBox status={alertStatus} message={alertMsg} onHide={hideAlert} />
       )}
      
       <table>

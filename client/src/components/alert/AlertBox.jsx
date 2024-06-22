@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BsBan, BsCheck2Circle } from "react-icons/bs";
 
-const AlertBox = ({status, message}) => {
+const AlertBox = ({ status, message, onHide }) => {
+  const [hide, setHide] = useState(false);
+
   const AlertContent = () => {
     return (
       <div className={`alert-box-content ${status}`}>
@@ -19,10 +21,24 @@ const AlertBox = ({status, message}) => {
       </div>
     );
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setHide(true);
+    }, 3000);
+
+    return () => {
+      setHide(false);
+      clearTimeout(timer);
+    };
+  }, [onHide]);
+
   return (
-    <div className={`alert-box`}>
-      <AlertContent />
-    </div>
+    !hide && (
+      <div className={`alert-box`}>
+        <AlertContent />
+      </div>
+    )
   );
 };
 
